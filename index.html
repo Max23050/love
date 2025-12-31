@@ -1100,6 +1100,33 @@
             margin-top: 5px;
         }
 
+        /* Sound Control */
+        .sound-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: none;
+            /* Hidden initially */
+        }
+
+        .sound-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
         /* Sparkle cursor effect */
         .cursor-sparkle {
             position: fixed;
@@ -1130,6 +1157,10 @@
         <div class="stars" id="stars"></div>
         <div class="snowfall" id="snowfall"></div>
         <div class="fireworks-container" id="fireworks"></div>
+
+        <!-- Audio -->
+        <audio id="bgMusic" src="thesimths.mp3" loop></audio>
+        <button class="sound-control" id="soundBtn" onclick="toggleSound()">🔇</button>
 
         <!-- Screen 1: Welcome -->
         <div class="screen active" id="screen1">
@@ -1284,7 +1315,7 @@
                             <div class="distance-text">
                                 Отношения на расстоянии...<br>
                                 <span class="distance-subtext">Переписывались и созванивались каждый день и с
-                                    нетерпением ждяли нашей встречи 💕</span>
+                                    нетерпением ждали нашей встречи 💕</span>
                             </div>
                         </div>
                     </div>
@@ -1358,7 +1389,7 @@
                         <div class="timeline-milestone">
                             <div class="milestone-date">27 ноября</div>
                             <div class="milestone-content">
-                                <span class="milestone-text">Отпраздновали 6 месяцев</span>
+                                <span class="milestone-text">Отпраздновали 6 месяцев 💞</span>
                             </div>
                             <img src="photos/nov-27.jpg" class="timeline-photo-thumb"
                                 style="width: 100%; height: auto; max-height: 200px;" onclick="openPhoto(this.src)"
@@ -1680,6 +1711,42 @@
         // ===== SCREEN 3: Romantic Transition =====
         function goToMemories() {
             goToScreen(4);
+            playMusic();
+        }
+
+        // Music Control
+        function playMusic() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('soundBtn');
+
+            audio.volume = 0;
+            audio.play().then(() => {
+                btn.style.display = 'flex';
+                btn.textContent = '🔊';
+                // Fade in
+                let vol = 0;
+                const fade = setInterval(() => {
+                    if (vol < 0.5) { // Max volume 50%
+                        vol += 0.05;
+                        audio.volume = vol;
+                    } else {
+                        clearInterval(fade);
+                    }
+                }, 200);
+            }).catch(e => console.log("Audio play failed (user interaction needed first)", e));
+        }
+
+        function toggleSound() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('soundBtn');
+
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = '🔊';
+            } else {
+                audio.pause();
+                btn.textContent = '🔇';
+            }
         }
 
         // ===== SCREEN 4: Memories =====
