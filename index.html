@@ -806,9 +806,13 @@
             max-width: 340px;
             max-height: 55vh;
             overflow-y: auto;
-            padding: 10px 0;
+            padding: 15px;
             scrollbar-width: thin;
             scrollbar-color: var(--aurora-pink) transparent;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .timeline-wrapper::-webkit-scrollbar {
@@ -818,6 +822,42 @@
         .timeline-wrapper::-webkit-scrollbar-thumb {
             background: var(--aurora-pink);
             border-radius: 2px;
+        }
+
+        /* Milestone - special highlighted event */
+        .timeline-milestone {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.25), rgba(196, 77, 255, 0.25));
+            border: 2px solid var(--aurora-pink);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .milestone-date {
+            font-size: 0.85rem;
+            color: var(--aurora-pink);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .milestone-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .milestone-icon {
+            font-size: 1.8rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .milestone-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--snow-white);
+            text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
         }
 
         .timeline {
@@ -1004,9 +1044,60 @@
             flex-wrap: wrap;
         }
 
-        .timeline-photos-grid .timeline-photo-placeholder {
+        .timeline-photos-grid .timeline-photo-thumb {
             width: 100px;
             height: 75px;
+            object-fit: cover;
+        }
+
+        .timeline-photo-thumb {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-photo-thumb:hover {
+            transform: scale(1.05);
+            border-color: var(--aurora-pink);
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Distance period special block */
+        .timeline-distance-period {
+            background: linear-gradient(135deg, rgba(196, 77, 255, 0.15), rgba(77, 195, 255, 0.15));
+            border-radius: 16px;
+            padding: 20px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .distance-icon {
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .distance-text {
+            font-family: 'Spectral', serif;
+            font-size: 1rem;
+            color: var(--snow-soft);
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .distance-subtext {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 5px;
         }
 
         /* Sparkle cursor effect */
@@ -1060,6 +1151,8 @@
                 <!-- Snowflakes will be spawned here -->
             </div>
             <p class="game-instruction">Нажимай на снежинки, чтобы собрать пожелания!</p>
+            <button class="btn-magic" style="margin-top: 15px; font-size: 0.9rem; padding: 8px 20px; opacity: 0.8;"
+                onclick="endGame()">Пропустить игру ⏩</button>
         </div>
 
         <!-- Screen 3: Romantic Transition -->
@@ -1111,12 +1204,13 @@
 
                         <div class="timeline-item">
                             <div class="timeline-date">10 апреля</div>
-                            <div class="timeline-title">Наш первый поцелуй 💋</div>
+                            <div class="timeline-title">Наш первый поцелуй 😘</div>
                         </div>
 
                         <div class="timeline-item">
                             <div class="timeline-date">26 апреля</div>
-                            <div class="timeline-photo-placeholder" onclick="openPhoto('photos/april-26.jpg')">📷</div>
+                            <img src="photos/april-26.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
                             <div class="timeline-caption">Здесь мы ещё не знали, что нас ждёт впереди...</div>
                         </div>
                     </div>
@@ -1127,13 +1221,23 @@
 
                         <div class="timeline-item">
                             <div class="timeline-date">1 мая</div>
-                            <div class="timeline-photo-placeholder" onclick="openPhoto('photos/may-1.jpg')">📷</div>
+                            <img src="photos/may-1.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
                         </div>
 
                         <div class="timeline-item">
                             <div class="timeline-date">17 мая</div>
-                            <div class="timeline-photo-placeholder" onclick="openPhoto('photos/may-17.jpg')">📷</div>
+                            <img src="photos/may-17.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
                             <div class="timeline-caption">В этот день мы впервые сказали друг другу "я люблю тебя" ❤️
+                            </div>
+                        </div>
+
+                        <div class="timeline-milestone">
+                            <div class="milestone-date">27 мая</div>
+                            <div class="milestone-content">
+                                <span class="milestone-icon">💕</span>
+                                <span class="milestone-text">Начали встречаться</span>
                             </div>
                         </div>
                     </div>
@@ -1144,17 +1248,160 @@
 
                         <div class="timeline-item">
                             <div class="timeline-date">4 июня</div>
-                            <div class="timeline-photo-placeholder" onclick="openPhoto('photos/june-4.jpg')">📷</div>
+                            <img src="photos/june-4.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
                         </div>
 
                         <div class="timeline-item">
                             <div class="timeline-date">12 июня</div>
                             <div class="timeline-photos-grid">
-                                <div class="timeline-photo-placeholder" onclick="openPhoto('photos/june-12-1.jpg')">📷
-                                </div>
-                                <div class="timeline-photo-placeholder" onclick="openPhoto('photos/june-12-2.jpg')">📷
-                                </div>
+                                <img src="photos/june-12-1.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/june-12-2.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
                             </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">18 июня</div>
+                            <img src="photos/june-18.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">22 июня</div>
+                            <img src="photos/june-22.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+                    </div>
+
+                    <!-- Июль-Август: Расстояние -->
+                    <div class="timeline-month">
+                        <div class="timeline-month-label">Июль — Август 2025</div>
+
+                        <div class="timeline-distance-period">
+                            <div class="distance-icon">💌</div>
+                            <div class="distance-text">
+                                Отношения на расстоянии...<br>
+                                <span class="distance-subtext">Переписывались и созванивались каждый день и с
+                                    нетерпением ждяли нашей встречи 💕</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Сентябрь -->
+                    <div class="timeline-month">
+                        <div class="timeline-month-label">Сентябрь 2025</div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">9 сентября</div>
+                            <img src="photos/sept-9.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                            <div class="timeline-caption">Наша долгожданная встреча после 2 месяцев расстояния 🥹❤️
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">11 сентября</div>
+                            <img src="photos/sept-11.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">12-14 сентября</div>
+                            <div class="timeline-title">Наше первое путешествие 🌍</div>
+                            <div class="timeline-photos-grid" style="margin-top: 10px;">
+                                <img src="photos/sept-trip-1.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/sept-trip-2.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/sept-trip-3.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/sept-trip-4.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/sept-trip-5.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/sept-trip-6.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Октябрь -->
+                    <div class="timeline-month">
+                        <div class="timeline-month-label">Октябрь 2025</div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">11 октября</div>
+                            <img src="photos/oct-11.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                            <div class="timeline-caption">Сходили в Цирк дю Солей 🎪</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">21 октября</div>
+                            <img src="photos/oct-21.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+                    </div>
+
+                    <!-- Ноябрь -->
+                    <div class="timeline-month">
+                        <div class="timeline-month-label">Ноябрь 2025</div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">8 ноября</div>
+                            <img src="photos/nov-8.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+
+                        <div class="timeline-milestone">
+                            <div class="milestone-date">27 ноября</div>
+                            <div class="milestone-content">
+                                <span class="milestone-text">Отпраздновали 6 месяцев</span>
+                            </div>
+                            <img src="photos/nov-27.jpg" class="timeline-photo-thumb"
+                                style="width: 100%; height: auto; max-height: 200px;" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+                    </div>
+
+                    <!-- Декабрь -->
+                    <div class="timeline-month">
+                        <div class="timeline-month-label">Декабрь 2025</div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">7 декабря</div>
+                            <img src="photos/dec-7.jpg" class="timeline-photo-thumb" onclick="openPhoto(this.src)"
+                                alt="Фото">
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">20 декабря</div>
+                            <div class="timeline-photos-grid">
+                                <img src="photos/dec-20-1.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/dec-20-2.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/dec-20-3.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                                <img src="photos/dec-20-4.jpg" class="timeline-photo-thumb"
+                                    onclick="openPhoto(this.src)" alt="Фото">
+                            </div>
+                            <div class="timeline-caption">Сходили на каток, приготовили стейк, испекли пряники и выпили
+                                глинтвейн ⛸️🥩🍪🍷</div>
+                        </div>
+                    </div>
+
+                    <!-- Будущее -->
+                    <div class="timeline-month" style="margin-top: 40px;">
+                        <div class="timeline-future-block"
+                            style="text-align: center; padding: 30px 20px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                            <span
+                                style="font-size: 3rem; display: block; margin-bottom: 15px; animation: float 3s ease-in-out infinite;">🚀</span>
+                            <h3
+                                style="font-family: 'Caveat', cursive; font-size: 1.8rem; color: var(--gold-warm); margin-bottom: 10px;">
+                                Дальше — только лучше!</h3>
                         </div>
                     </div>
                 </div>
